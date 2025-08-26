@@ -56,13 +56,22 @@ const fontConfig = [
     family: "LibreFranklin-Variable",
     file: require("../assets/fonts/Arimo,Barlow_Condensed,Commissioner,Dosis,Karla,etc/Libre_Franklin/LibreFranklin-VariableFont_wght.ttf"),
   },
+  {
+    family: "Quicksand-Variable",
+    file: require("../assets/fonts/Arimo,Barlow_Condensed,Commissioner,Dosis,Karla,etc/Quicksand/Quicksand-VariableFont_wght.ttf"),
+  },
 ];
+
+// Export font helpers for reuse
+export const fontFamilies = fontConfig.map((f) => f.family);
+export const fontsToLoad: { [key: string]: any } = fontConfig.reduce((acc, f) => {
+  acc[f.family] = f.file;
+  return acc;
+}, {} as { [key: string]: any });
 
 export default function NamaStambukFont({ urutanStambuk = 5 }: { urutanStambuk?: number }) {
   // Load semua font
-  const fontMap: any = {};
-  fontConfig.forEach(f => { fontMap[f.family] = f.file; });
-  const [fontsLoaded] = useFonts(fontMap);
+  const [fontsLoaded] = useFonts(fontsToLoad);
   if (!fontsLoaded) return <Text>Loading fonts...</Text>;
 
   // Hitung index mundur dan maju (wrap around)
@@ -78,7 +87,7 @@ export default function NamaStambukFont({ urutanStambuk = 5 }: { urutanStambuk?:
         <Text
           key={i}
           style={{
-            fontFamily: fontConfig[idxFont].family,
+            fontFamily: fontFamilies[idxFont % fontFamilies.length],
             fontSize: 24,
             marginVertical: 6,
           }}

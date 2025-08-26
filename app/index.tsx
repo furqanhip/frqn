@@ -14,9 +14,10 @@
  */
 
 
+import { useFonts } from 'expo-font';
 import React from "react";
-import { Image, StyleSheet, View, Text } from "react-native";
-import NamaStambukFont from "./NamaStambukFont";
+import { Image, StyleSheet, Text, View } from "react-native";
+import NamaStambukFont, { fontFamilies, fontsToLoad } from "./NamaStambukFont";
 
 export default function Index() {
   // Daftar 12 foto berbeda
@@ -32,15 +33,24 @@ export default function Index() {
     "https://simak.unismuh.ac.id/upload/mahasiswa/105841107122_.jpg?1756214979",
     "https://simak.unismuh.ac.id/upload/mahasiswa/105841107222_.jpg?1756214979",
     "https://simak.unismuh.ac.id/upload/mahasiswa/105841107322_.jpg?1756214979",
-    "https://simak.unismuh.ac.id/upload/mahasiswa/105841107422_.jpg?1756214979",
   ];
 
   // Daftar nama dummy (bisa diganti dengan nama asli jika ada)
   const namaArray = [
     "mega", "fadli", "fahri", "agil", "aliza",
     "furqan", "basoo", "uci", "zalna", "ipul",
-    "alpin", "wahyu"
+    "alpin"
   ];
+
+  // Load fonts here so names under photos use the same loaded fonts
+  const [fontsLoaded] = useFonts(fontsToLoad as any);
+  if (!fontsLoaded) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading fonts...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: "#f5f5f5", justifyContent: "center", alignItems: "center" }}>
@@ -52,7 +62,7 @@ export default function Index() {
               style={styles.photo}
               resizeMode="cover"
             />
-            <Text style={styles.namaText}>{namaArray[idx] || '-'}</Text>
+            <Text style={[styles.namaText, { fontFamily: fontFamilies[idx] }]}>{namaArray[idx] || '-'}</Text>
           </View>
         ))}
       </View>
