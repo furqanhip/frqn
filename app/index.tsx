@@ -16,8 +16,8 @@
 
 import { useFonts } from 'expo-font';
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import NamaStambukFont, { fontFamilies, fontsToLoad } from "./NamaStambukFont";
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { fontFamilies, fontsToLoad } from "./NamaStambukFont";
 
 export default function Index() {
   // Daftar 12 foto berbeda
@@ -35,26 +35,30 @@ export default function Index() {
     "https://simak.unismuh.ac.id/upload/mahasiswa/105841107322_.jpg?1756214979",
   ];
 
-  // Daftar nama dummy (bisa diganti dengan nama asli jika ada)
+  // Daftar nama yang ditampilkan di bawah setiap foto
   const namaArray = [
     "mega", "fadli", "fahri", "agil", "aliza",
     "furqan", "basoo", "uci", "zalna", "ipul",
     "alpin"
   ];
 
-  // Load fonts here so names under photos use the same loaded fonts
+  // Load fonts so each name can use a distinct font
   const [fontsLoaded] = useFonts(fontsToLoad as any);
   if (!fontsLoaded) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Loading fonts...</Text>
+        <ActivityIndicator size="small" />
       </View>
     );
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#f5f5f5", justifyContent: "center", alignItems: "center" }}>
-      <View style={styles.photoGrid}>
+    <View style={{ flex: 1, backgroundColor: "#f5f5f5", justifyContent: "flex-start", alignItems: "center" }}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.photoGrid}
+      >
         {photoUrls.map((url, idx) => (
           <View key={idx} style={styles.photoItem}>
             <Image
@@ -62,33 +66,33 @@ export default function Index() {
               style={styles.photo}
               resizeMode="cover"
             />
-            <Text style={[styles.namaText, { fontFamily: fontFamilies[idx] }]}>{namaArray[idx] || '-'}</Text>
+            <Text style={[styles.namaText, { fontFamily: fontFamilies[idx % fontFamilies.length] }]}>{namaArray[idx] || '-'}</Text>
           </View>
         ))}
-      </View>
-      <NamaStambukFont urutanStambuk={5} />
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+    width: '100%',
+  },
   photoGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+    flexDirection: 'column',
     alignItems: 'center',
-    marginBottom: 24,
-    gap: 10,
-    maxWidth: 400,
+    paddingHorizontal: 8,
+    paddingVertical: 12,
   },
   photoItem: {
     alignItems: 'center',
-    margin: 3,
-    width: 80,
+    marginVertical: 6,
+    width: 120,
   },
   photo: {
-    width: 80,
-    height: 106,
+    width: 120,
+    height: 160,
     borderRadius: 10,
     backgroundColor: '#eee',
   },

@@ -56,10 +56,6 @@ const fontConfig = [
     family: "LibreFranklin-Variable",
     file: require("../assets/fonts/Arimo,Barlow_Condensed,Commissioner,Dosis,Karla,etc/Libre_Franklin/LibreFranklin-VariableFont_wght.ttf"),
   },
-  {
-    family: "Quicksand-Variable",
-    file: require("../assets/fonts/Arimo,Barlow_Condensed,Commissioner,Dosis,Karla,etc/Quicksand/Quicksand-VariableFont_wght.ttf"),
-  },
 ];
 
 // Export font helpers for reuse
