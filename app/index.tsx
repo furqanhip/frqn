@@ -14,8 +14,8 @@
  */
 
 
-import * as React from 'react';
 import { Redirect } from 'expo-router';
+import * as React from 'react';
 
 export default function Index() {
   // Redirect root to the Home tab so the tab bar is visible by default

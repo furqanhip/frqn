@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function About() {
   return (
