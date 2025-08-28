@@ -14,93 +14,11 @@
  */
 
 
-import { useFonts } from 'expo-font';
-import React from "react";
-import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import { fontFamilies, fontsToLoad } from "./NamaStambukFont";
+import * as React from 'react';
+import { Redirect } from 'expo-router';
 
 export default function Index() {
-  // Daftar 12 foto berbeda
-  const photoUrls = [
-    "https://simak.unismuh.ac.id/upload/mahasiswa/105841106322_.jpg?1756214979",
-    "https://simak.unismuh.ac.id/upload/mahasiswa/105841106422_.jpg?1756214979",
-    "https://simak.unismuh.ac.id/upload/mahasiswa/105841106522_.jpg?1756214979",
-    "https://simak.unismuh.ac.id/upload/mahasiswa/105841106622_.jpg?1756214979",
-    "https://simak.unismuh.ac.id/upload/mahasiswa/105841106722_.jpg?1756214979",
-    "https://simak.unismuh.ac.id/upload/mahasiswa/105841106822_.jpg?1756214979",
-    "https://simak.unismuh.ac.id/upload/mahasiswa/105841106922_.jpg?1756214979",
-    "https://simak.unismuh.ac.id/upload/mahasiswa/105841107022_.jpg?1756214979",
-    "https://simak.unismuh.ac.id/upload/mahasiswa/105841107122_.jpg?1756214979",
-    "https://simak.unismuh.ac.id/upload/mahasiswa/105841107222_.jpg?1756214979",
-    "https://simak.unismuh.ac.id/upload/mahasiswa/105841107322_.jpg?1756214979",
-  ];
-
-  // Daftar nama yang ditampilkan di bawah setiap foto
-  const namaArray = [
-    "mega", "fadli", "fahri", "agil", "aliza",
-    "furqan", "basoo", "uci", "zalna", "ipul",
-    "alpin"
-  ];
-
-  // Load fonts so each name can use a distinct font
-  const [fontsLoaded] = useFonts(fontsToLoad as any);
-  if (!fontsLoaded) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="small" />
-      </View>
-    );
-  }
-
-  return (
-    <View style={{ flex: 1, backgroundColor: "#f5f5f5", justifyContent: "flex-start", alignItems: "center" }}>
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.photoGrid}
-      >
-        {photoUrls.map((url, idx) => (
-          <View key={idx} style={styles.photoItem}>
-            <Image
-              source={{ uri: url }}
-              style={styles.photo}
-              resizeMode="cover"
-            />
-            <Text style={[styles.namaText, { fontFamily: fontFamilies[idx % fontFamilies.length] }]}>{namaArray[idx] || '-'}</Text>
-          </View>
-        ))}
-      </ScrollView>
-    </View>
-  );
+  // Redirect root to the Home tab so the tab bar is visible by default
+  return <Redirect href="/home" />;
 }
 
-const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-    width: '100%',
-  },
-  photoGrid: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 12,
-  },
-  photoItem: {
-    alignItems: 'center',
-    marginVertical: 6,
-    width: 120,
-  },
-  photo: {
-    width: 120,
-    height: 160,
-    borderRadius: 10,
-    backgroundColor: '#eee',
-  },
-  namaText: {
-    marginTop: 4,
-    fontSize: 12,
-    color: '#333',
-    textAlign: 'center',
-    maxWidth: 80,
-  },
-});

@@ -1,20 +1,12 @@
-import { useFonts } from "expo-font";
 import React from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
 
-// Daftar nama contoh (bisa diganti sesuai kebutuhan)
-const daftarNama = [
-  "Ayu Lestari", "Budi Santoso", "Citra Dewi", "Dewi Anggraini", "Eka Putra",
-  "Fajar Pratama", "Gita Sari", "Hadi Wijaya", "Indra Gunawan", "Joko Susilo",
-  "Kiki Amelia", "Lina Marlina", "Maya Sari", "Nina Kartika", "Oki Saputra",
-  "Putri Ayu", "Qori Rahma", "Rina Sari", "Sari Dewi", "Tono Prabowo",
-  "Umar Hadi", "Vina Melati", "Wawan Setiawan", "Xenia Putri", "Yuni Astuti",
-  "Zaki Akbar"
-];
+// Daftar nama disembunyikan sesuai permintaan
+const daftarNama: string[] = [];
 
-// Konfigurasi font: 5 statis, 5 variable
+// Konfigurasi font: 5 statis + 5 variable (total 10)
 const fontConfig = [
-  // Statis (Barlow Condensed, Ubuntu)
+  // 5 static
   {
     family: "BarlowCondensed-Bold",
     file: require("../assets/fonts/Arimo,Barlow_Condensed,Commissioner,Dosis,Karla,etc/Barlow_Condensed/BarlowCondensed-Bold.ttf"),
@@ -35,7 +27,7 @@ const fontConfig = [
     family: "Ubuntu-Regular",
     file: require("../assets/fonts/Arimo,Barlow_Condensed,Commissioner,Dosis,Karla,etc/Ubuntu/Ubuntu-Regular.ttf"),
   },
-  // Variable
+  // 5 variable
   {
     family: "Arimo-Variable",
     file: require("../assets/fonts/Arimo,Barlow_Condensed,Commissioner,Dosis,Karla,etc/Arimo/Arimo-VariableFont_wght.ttf"),
@@ -53,29 +45,29 @@ const fontConfig = [
     file: require("../assets/fonts/Arimo,Barlow_Condensed,Commissioner,Dosis,Karla,etc/Karla/Karla-VariableFont_wght.ttf"),
   },
   {
-    family: "LibreFranklin-Variable",
-    file: require("../assets/fonts/Arimo,Barlow_Condensed,Commissioner,Dosis,Karla,etc/Libre_Franklin/LibreFranklin-VariableFont_wght.ttf"),
+    family: "Quicksand-Variable",
+    file: require("../assets/fonts/Arimo,Barlow_Condensed,Commissioner,Dosis,Karla,etc/Quicksand/Quicksand-VariableFont_wght.ttf"),
   },
 ];
 
-// Export font helpers for reuse
+// Export font helpers
 export const fontFamilies = fontConfig.map((f) => f.family);
 export const fontsToLoad: { [key: string]: any } = fontConfig.reduce((acc, f) => {
   acc[f.family] = f.file;
   return acc;
 }, {} as { [key: string]: any });
 
-export default function NamaStambukFont({ urutanStambuk = 5 }: { urutanStambuk?: number }) {
-  // Load semua font
-  const [fontsLoaded] = useFonts(fontsToLoad);
+export default function NamaStambukFont({ urutanStambuk = 5, fontsLoaded = true }: { urutanStambuk?: number; fontsLoaded?: boolean }) {
+  // fontsLoaded diberikan dari index.tsx
   if (!fontsLoaded) return <Text>Loading fonts...</Text>;
 
-  // Hitung index mundur dan maju (wrap around)
+  // Hitung 10 nama: 5 sebelum dan 5 setelah urutanStambuk (wrap-around)
   const total = daftarNama.length;
+  if (total === 0) return null; // nothing to render when no names
   const idx = ((urutanStambuk - 1) + total) % total;
   const before = Array.from({ length: 5 }, (_, i) => (idx - (i + 1) + total) % total).reverse();
   const after = Array.from({ length: 5 }, (_, i) => (idx + (i + 1)) % total);
-  const indices = [...before, ...after];
+  const indices = [...before, ...after]; // 10 indices
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -83,8 +75,9 @@ export default function NamaStambukFont({ urutanStambuk = 5 }: { urutanStambuk?:
         <Text
           key={i}
           style={{
-            fontFamily: fontFamilies[idxFont % fontFamilies.length],
-            fontSize: 24,
+            // assign one-to-one font by index (no modulo) to ensure distinct fonts for 10 names
+            fontFamily: fontFamilies[idxFont] || undefined,
+            fontSize: 20,
             marginVertical: 6,
           }}
         >
