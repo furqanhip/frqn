@@ -1,8 +1,9 @@
+import { useFonts } from 'expo-font';
 import React from "react";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native";
 
-// Daftar nama disembunyikan sesuai permintaan
-const daftarNama: string[] = [];
+// Generate sample daftar nama (1..140) — cukup panjang untuk mendemonstrasikan wrap-around
+const daftarNama: string[] = Array.from({ length: 140 }, (_, i) => `Nama ${i + 1}`);
 
 // Konfigurasi font: 5 statis + 5 variable (total 10)
 const fontConfig = [
@@ -57,25 +58,32 @@ export const fontsToLoad: { [key: string]: any } = fontConfig.reduce((acc, f) =>
   return acc;
 }, {} as { [key: string]: any });
 
-export default function NamaStambukFont({ urutanStambuk = 5, fontsLoaded = true }: { urutanStambuk?: number; fontsLoaded?: boolean }) {
-  // fontsLoaded diberikan dari index.tsx
-  if (!fontsLoaded) return <Text>Loading fonts...</Text>;
+export default function NamaStambukFont({ urutanStambuk = 5 }: { urutanStambuk?: number }) {
+  // Load fonts defined above
+  const [loaded] = useFonts(fontsToLoad);
+  if (!loaded) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
 
   // Hitung 10 nama: 5 sebelum dan 5 setelah urutanStambuk (wrap-around)
   const total = daftarNama.length;
-  if (total === 0) return null; // nothing to render when no names
-  const idx = ((urutanStambuk - 1) + total) % total;
+  if (total === 0) return null;
+  // convert to 0-based index
+  const idx = ((urutanStambuk - 1) % total + total) % total;
   const before = Array.from({ length: 5 }, (_, i) => (idx - (i + 1) + total) % total).reverse();
   const after = Array.from({ length: 5 }, (_, i) => (idx + (i + 1)) % total);
-  const indices = [...before, ...after]; // 10 indices
+  const indices = [...before, ...after];
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {indices.map((i, idxFont) => (
         <Text
-          key={i}
+          key={`${i}-${idxFont}`}
           style={{
-            // assign one-to-one font by index (no modulo) to ensure distinct fonts for 10 names
             fontFamily: fontFamilies[idxFont] || undefined,
             fontSize: 20,
             marginVertical: 6,

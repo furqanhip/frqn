@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
-import students, { type Student } from '../../data/students';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import * as React from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import students, { type Student } from '../../data/students';
 
 export default function StudentsList() {
   const router = useRouter();

@@ -1,6 +1,6 @@
+import { useLocalSearchParams, useNavigation } from 'expo-router';
 import * as React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import students from '../../data/students';
 
 export default function StudentDetail() {
@@ -15,6 +15,18 @@ export default function StudentDetail() {
       </View>
     );
   }
+
+  // set header title to student's name (so the header doesn't show the raw route like "students/[nim]")
+  const navigation = useNavigation();
+  React.useEffect(() => {
+    if (student) {
+      try {
+        (navigation as any).setOptions({ title: student.name });
+      } catch (e) {
+        // setOptions may not be available in some web dev layouts; ignore safely
+      }
+    }
+  }, [navigation, student]);
 
   return (
     <View style={styles.container}>
